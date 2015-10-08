@@ -19,8 +19,6 @@ def whitespace(code, inp=''):
         while code:
             code, func, kwargs = parse(code)
             program.append((func, kwargs))
-            # print(kwargs)
-            # print(func)
     except ParseError as e:
         print('Parse Error: {}'.format(e.code), file=sys.stderr)
         sys.exit(1)

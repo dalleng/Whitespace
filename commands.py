@@ -55,7 +55,7 @@ def multiplication(inp, output, stack, heap):
 def division(inp, output, stack, heap):
     a = stack.pop()
     b = stack.pop()
-    stack.append(b / a)
+    stack.append(b // a)
     return inp, output
 
 
