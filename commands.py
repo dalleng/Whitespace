@@ -23,12 +23,19 @@ def duplicate_nth(inp, output, stack, heap, sign=None, digit=None):
     assert digit is not None
     assert sign is not None
     n = parse_digit(sign, digit)
-    stack.insert(-n-1, stack[-n-1])
+    stack.append(stack[-n-1])
     return inp, output
 
 
 def discard_top_n(inp, output, stack, heap, sign=None, digit=None):
-    pass
+    assert digit is not None
+    assert sign is not None
+    n = parse_digit(sign, digit)
+
+    if n < 0 or n >= len(stack):
+        stack = [stack[-1]]
+    else:
+        pass
 
 
 def duplicate_top(inp, output, stack, heap):

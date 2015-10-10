@@ -24,6 +24,7 @@ Whitespace is an esoteric programming language that uses only three characters:
 
 """
 chars = {'SPACE': r' ', 'TAB': r'\t', 'LINE_FEED': r'\n'}
+comments = r'[^{SPACE}{TAB}{LINE_FEED}]'.format(**chars)
 
 
 """ Each command in whitespace begins with an Instruction Modification
@@ -58,7 +59,8 @@ IMP [space] - Stack Manipulation
 
     [space] (number): Push n onto the stack.
 
-    [tab][space] (number): Duplicate the nth value from the top of the stack.
+    [tab][space] (number): Copy the nth value from the top of the stack
+    and insert the copy on top of the stack.
 
     [tab][line-feed] (number): Discard the top n values below the top of the
     stack from the stack. (For n<0 or n>=stack.length, remove everything but

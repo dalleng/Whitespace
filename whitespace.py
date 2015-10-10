@@ -1,12 +1,9 @@
 from __future__ import print_function
 
 from commands import StopProgram
-from grammar import grammar
+from grammar import grammar, comments
 
 import re
-import sys
-
-import pdb
 
 
 def whitespace(code, inp='', debug=False):
@@ -15,16 +12,15 @@ def whitespace(code, inp='', debug=False):
     heap = {}
     program = []
 
-    try:
-        while code:
-            code, func, kwargs = parse(code)
-            program.append((func, kwargs))
+    # remove comments
+    code = re.sub(comments, '', code)
 
-            if debug:
-                print('Parse:', func.__name__, kwargs)
-    except ParseError as e:
-        print('Parse Error: {}'.format(e.code), file=sys.stderr)
-        sys.exit(1)
+    while code:
+        code, func, kwargs = parse(code)
+        program.append((func, kwargs))
+
+        if debug:
+            print('Parse:', func.__name__, kwargs)
 
     for func, kwargs in program:
         try:

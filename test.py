@@ -57,30 +57,14 @@ class StackManipulationTest(unittest.TestCase):
             push_A, push_B, discard_top, print_output, exit)), 'A')
 
     def test_duplicate_nth(self):
-        push_A = '   \t     \t\n'
-        push_B = '   \t    \t \n'
-        push_C = '   \t    \t\t\n'
-        duplicate_A = ' \t  \t \n'
-        discard_top = ' \n\n'
-        print_output = '\t\n  '
-        print_output = '\t\n  '
+        push1 = '   \t\n'
+        push2 = '   \t \n'
+        push3 = '   \t\t\n'
+        duplicate3 = '\t\n \t'
         exit = '\n\n\n'
 
-        self.assertEqual(whitespace('{}{}{}{}{}{}{}{}{}'.format(
-            push_A, push_B, push_C, duplicate_A, discard_top, discard_top,
-            print_output, print_output, exit)), 'AA')
-
-        duplicate_B = ' \t  \t\n'
-
-        self.assertEqual(whitespace('{}{}{}{}{}{}{}{}'.format(
-            push_A, push_B, push_C, duplicate_B, discard_top,
-            print_output, print_output, exit)), 'BB')
-
-        duplicate_C = ' \t   \n'
-
-        self.assertEqual(whitespace('{}{}{}{}{}{}{}'.format(
-            push_A, push_B, push_C, duplicate_C,
-            print_output, print_output, exit)), 'CC')
+        self.assertEqual(whitespace('{}{}{}{}{}'.format(
+            push1, push2, push3, duplicate3, exit)), '3')
 
 
 class ArithmethicTest(unittest.TestCase):
@@ -156,7 +140,7 @@ class ArithmethicTest(unittest.TestCase):
                 push2, push0, div, print_output, exit))
 
     def test_modulo(self):
-        push2 = '   \t\t\n'
+        push3 = '   \t\t\n'
         push4 = '   \t  \n'
         mod = '\t \t\t'
         print_output = '\t\n \t'
@@ -164,18 +148,18 @@ class ArithmethicTest(unittest.TestCase):
 
         # 4 % 3
         self.assertEqual(whitespace('{}{}{}{}{}'.format(
-            push4, push2, mod, print_output, exit)), '1')
+            push4, push3, mod, print_output, exit)), '1')
 
         push0 = '   \n'
 
-        # 0 % 2
+        # 0 % 3
         self.assertEqual(whitespace('{}{}{}{}{}'.format(
-            push0, push2, mod, print_output, exit)), '0')
+            push0, push3, mod, print_output, exit)), '0')
 
-        # 2 % 0
+        # 3 % 0
         with self.assertRaises(ZeroDivisionError):
             whitespace('{}{}{}{}{}'.format(
-                push2, push0, mod, print_output, exit))
+                push3, push0, mod, print_output, exit))
 
 
 if __name__ == '__main__':
