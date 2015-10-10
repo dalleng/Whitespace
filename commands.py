@@ -4,17 +4,31 @@ class StopProgram(Exception):
         pass
 
 
-def push_stack(inp, output, stack, heap, sign=None, digit=None):
-    assert digit is not None
-    assert sign is not None
-
+def parse_digit(sign, digit):
     digit = digit or '0'
     digit = digit.replace(' ', '0').replace('\t', '1')
     sign = sign.replace(' ', '1').replace('\t', '-1')
     digit = int(sign) * int(digit, base=2)
-    stack.append(digit)
+    return digit
 
+
+def push_stack(inp, output, stack, heap, sign=None, digit=None):
+    assert digit is not None
+    assert sign is not None
+    stack.append(parse_digit(sign, digit))
     return inp, output
+
+
+def duplicate_nth(inp, output, stack, heap, sign=None, digit=None):
+    assert digit is not None
+    assert sign is not None
+    n = parse_digit(sign, digit)
+    stack.insert(-n-1, stack[-n-1])
+    return inp, output
+
+
+def discard_top_n(inp, output, stack, heap, sign=None, digit=None):
+    pass
 
 
 def duplicate_top(inp, output, stack, heap):
@@ -56,6 +70,13 @@ def division(inp, output, stack, heap):
     a = stack.pop()
     b = stack.pop()
     stack.append(b // a)
+    return inp, output
+
+
+def modulo(inp, output, stack, heap):
+    a = stack.pop()
+    b = stack.pop()
+    stack.append(b % a)
     return inp, output
 
 

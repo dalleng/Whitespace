@@ -1,5 +1,7 @@
 from commands import (
     push_stack,
+    duplicate_nth,
+    discard_top_n,
     duplicate_top,
     swap_first_two,
     discard_top,
@@ -7,6 +9,7 @@ from commands import (
     subtraction,
     multiplication,
     division,
+    modulo,
     pop_print,
     pop_print_chr,
     exit_program
@@ -69,6 +72,8 @@ IMP [space] - Stack Manipulation
 
 """
 PUSH_STACK = r'{SPACE}{NUMBER}'.format(NUMBER=NUMBER, **chars)
+DUPLICATE_NTH = r'{TAB}{SPACE}{NUMBER}'.format(NUMBER=NUMBER, **chars)
+DISCARD_TOP_N = r'{TAB}{LINE_FEED}{NUMBER}'.format(NUMBER=NUMBER, **chars)
 DUPLICATE_TOP = r'{LINE_FEED}{SPACE}'.format(**chars)
 SWAP_FIRST_TWO = r'{LINE_FEED}{TAB}'.format(**chars)
 DISCARD_TOP = r'{LINE_FEED}{LINE_FEED}'.format(**chars)
@@ -93,6 +98,7 @@ ADDITION = r'{SPACE}{SPACE}'.format(**chars)
 SUBTRACTION = r'{SPACE}{TAB}'.format(**chars)
 MULTIPLICATION = r'{SPACE}{LINE_FEED}'.format(**chars)
 DIVISION = r'{TAB}{SPACE}'.format(**chars)
+MODULUS = r'{TAB}{TAB}'.format(**chars)
 
 POP_PRINT = r'{SPACE}{TAB}'.format(**chars)
 POP_PRINT_CHR = r'{SPACE}{SPACE}'.format(**chars)
@@ -101,6 +107,8 @@ EXIT = r'{LINE_FEED}{LINE_FEED}'.format(**chars)
 grammar = {
     STACK_MANIPULATION: {
         PUSH_STACK: push_stack,
+        DUPLICATE_NTH: duplicate_nth,
+        DISCARD_TOP_N: discard_top_n,
         DUPLICATE_TOP: duplicate_top,
         SWAP_FIRST_TWO: swap_first_two,
         DISCARD_TOP: discard_top,
@@ -110,6 +118,7 @@ grammar = {
         SUBTRACTION: subtraction,
         MULTIPLICATION: multiplication,
         DIVISION: division,
+        MODULUS: modulo
     },
     IO: {
         POP_PRINT: pop_print,

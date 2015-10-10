@@ -9,7 +9,7 @@ import sys
 import pdb
 
 
-def whitespace(code, inp=''):
+def whitespace(code, inp='', debug=False):
     output = ''
     stack = []
     heap = {}
@@ -19,12 +19,18 @@ def whitespace(code, inp=''):
         while code:
             code, func, kwargs = parse(code)
             program.append((func, kwargs))
+
+            if debug:
+                print('Parse:', func.__name__, kwargs)
     except ParseError as e:
         print('Parse Error: {}'.format(e.code), file=sys.stderr)
         sys.exit(1)
 
     for func, kwargs in program:
         try:
+            if debug:
+                print('Exec:', func.__name__, kwargs)
+
             i, o = func(inp, output, stack, heap, **kwargs)
             inp = i
             output = o
