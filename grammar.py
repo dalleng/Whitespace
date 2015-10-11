@@ -10,6 +10,8 @@ from commands import (
     multiplication,
     division,
     modulo,
+    heap_store,
+    heap_retrieve,
     pop_print,
     pop_print_chr,
     exit_program
@@ -102,6 +104,15 @@ MULTIPLICATION = r'{SPACE}{LINE_FEED}'.format(**chars)
 DIVISION = r'{TAB}{SPACE}'.format(**chars)
 MODULUS = r'{TAB}{TAB}'.format(**chars)
 
+"""
+IMP [tab][tab] - Heap Access
+
+    [space]: Pop a and b, then store a at heap address b.
+    [tab]: Pop a and then push the value at heap address a onto the stack.
+"""
+STORE = r'{SPACE}'.format(**chars)
+RETRIEVE = r'{TAB}'.format(**chars)
+
 POP_PRINT = r'{SPACE}{TAB}'.format(**chars)
 POP_PRINT_CHR = r'{SPACE}{SPACE}'.format(**chars)
 EXIT = r'{LINE_FEED}{LINE_FEED}'.format(**chars)
@@ -121,6 +132,10 @@ grammar = {
         MULTIPLICATION: multiplication,
         DIVISION: division,
         MODULUS: modulo
+    },
+    HEAP_ACCESS: {
+        STORE: heap_store,
+        RETRIEVE: heap_retrieve,
     },
     IO: {
         POP_PRINT: pop_print,

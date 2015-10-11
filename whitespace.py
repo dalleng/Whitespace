@@ -25,6 +25,10 @@ def whitespace(code, inp='', debug=False):
     for func, kwargs in program:
         try:
             if debug:
+                """
+                import pdb
+                pdb.set_trace()
+                """
                 print('Exec:', func.__name__, kwargs)
 
             i, o = func(inp, output, stack, heap, **kwargs)

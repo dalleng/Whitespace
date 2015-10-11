@@ -1,7 +1,6 @@
 
 class StopProgram(Exception):
-    def __init__(self):
-        pass
+    pass
 
 
 def parse_digit(sign, digit):
@@ -23,6 +22,10 @@ def duplicate_nth(inp, output, stack, heap, sign=None, digit=None):
     assert digit is not None
     assert sign is not None
     n = parse_digit(sign, digit)
+
+    if n < 0:
+        raise IndexError
+
     stack.append(stack[-n-1])
     return inp, output
 
@@ -33,9 +36,17 @@ def discard_top_n(inp, output, stack, heap, sign=None, digit=None):
     n = parse_digit(sign, digit)
 
     if n < 0 or n >= len(stack):
-        stack = [stack[-1]]
+        top = stack.pop()
+        del stack[:]
+        stack.append(top)
     else:
-        pass
+        stack_copy = stack[:]
+        del stack[:]
+        for i in range(0, len(stack_copy)-n-1):
+            stack.append(stack_copy[i])
+        stack.append(stack_copy[-1])
+
+    return inp, output
 
 
 def duplicate_top(inp, output, stack, heap):

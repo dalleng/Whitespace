@@ -66,6 +66,53 @@ class StackManipulationTest(unittest.TestCase):
         self.assertEqual(whitespace('{}{}{}{}{}'.format(
             push1, push2, push3, duplicate3, exit)), '3')
 
+        code = (
+            # push 0
+            '  \t\n'
+            # push 2
+            '   \t \n'
+            # push 3
+            '   \t\t\n'
+            # duplicate the -1th value from the top
+            ' \t \t\t\n'
+            # pop and print as number
+            '\t\n \t'
+            '\n\n\n'
+        )
+
+        with self.assertRaises(IndexError):
+            whitespace(code)
+
+    def test_discard_top_n(self):
+        code = (
+            # push -1
+            '  \t\t\n'
+            # push 2
+            '   \t \n'
+            # push 1
+            '   \t\n'
+            # push 3
+            '   \t\t\n'
+            # push 6
+            '   \t\t \n'
+            # push 5
+            '   \t \t\n'
+            # push 7
+            '   \t\t\t\n'
+            # swap first two
+            ' \n\t'
+            # discard top 3 below top
+            ' \t\n \t\t\n'
+            # pop and print as number
+            '\t\n \t'
+            '\t\n \t'
+            '\t\n \t'
+            '\t\n \t'
+            '\n\n\n'
+        )
+
+        self.assertEqual(whitespace(code, debug=True), '512-1')
+
 
 class ArithmethicTest(unittest.TestCase):
 
