@@ -98,6 +98,27 @@ def modulo(inp, output, stack, heap):
     return inp, output
 
 
+def heap_retrieve(inp, output, stack, heap):
+    a = stack.pop()
+    stack.append(heap[a])
+    return inp, output
+
+
+def heap_store(inp, output, stack, heap):
+    a = stack.pop()
+    b = stack.pop()
+    heap[b] = a
+    return inp, output
+
+
+def read_char(inp, output, stack, heap):
+    pass
+
+
+def read_number(inp, output, stack, heap):
+    pass
+
+
 def pop_print(inp, output, stack, heap):
     output += str(stack.pop())
     return inp, output

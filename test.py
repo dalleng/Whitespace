@@ -111,7 +111,7 @@ class StackManipulationTest(unittest.TestCase):
             '\n\n\n'
         )
 
-        self.assertEqual(whitespace(code, debug=True), '512-1')
+        self.assertEqual(whitespace(code), '512-1')
 
 
 class ArithmethicTest(unittest.TestCase):
@@ -207,6 +207,20 @@ class ArithmethicTest(unittest.TestCase):
         with self.assertRaises(ZeroDivisionError):
             whitespace('{}{}{}{}{}'.format(
                 push3, push0, mod, print_output, exit))
+
+
+class HeapTest(unittest.TestCase):
+
+    def test_store_retrieve(self):
+        push3 = '   \t\t\n'
+        push4 = '   \t  \n'
+        heap_store = '\t\t '
+        heap_retrieve = '\t\t\t'
+        print_output = '\t\n \t'
+        exit = '\n\n\n'
+        self.assertEqual(whitespace('{}{}{}{}{}{}{}'.format(
+            push3, push4, heap_store, push3,
+            heap_retrieve, print_output, exit)), '4')
 
 
 if __name__ == '__main__':

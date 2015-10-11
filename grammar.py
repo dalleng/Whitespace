@@ -12,6 +12,8 @@ from commands import (
     modulo,
     heap_store,
     heap_retrieve,
+    read_char,
+    read_number,
     pop_print,
     pop_print_chr,
     exit_program
@@ -108,13 +110,30 @@ MODULUS = r'{TAB}{TAB}'.format(**chars)
 IMP [tab][tab] - Heap Access
 
     [space]: Pop a and b, then store a at heap address b.
+
     [tab]: Pop a and then push the value at heap address a onto the stack.
 """
 STORE = r'{SPACE}'.format(**chars)
 RETRIEVE = r'{TAB}'.format(**chars)
 
+"""
+IMP [tab][line-feed] - Input/Output
+
+    [space][space]: Pop a value off the stack and output it as a character.
+
+    [space][tab]: Pop a value off the stack and output it as a number.
+
+    [tab][space]: Read a character from input, a, Pop a value off the
+    stack, b, then store the ASCII value of a at heap address b.
+
+    [tab][tab]: Read a number from input, a, Pop a value off the stack, b, then
+    store a at heap address b.
+"""
 POP_PRINT = r'{SPACE}{TAB}'.format(**chars)
 POP_PRINT_CHR = r'{SPACE}{SPACE}'.format(**chars)
+READ_CHAR = r'{TAB}{SPACE}'.format(**chars)
+READ_NUMBER = r'{TAB}{TAB}'.format(**chars)
+
 EXIT = r'{LINE_FEED}{LINE_FEED}'.format(**chars)
 
 grammar = {
@@ -139,7 +158,9 @@ grammar = {
     },
     IO: {
         POP_PRINT: pop_print,
-        POP_PRINT_CHR: pop_print_chr
+        POP_PRINT_CHR: pop_print_chr,
+        READ_CHAR: read_char,
+        READ_NUMBER: read_number,
     },
     FLOW_CONTROL: {
         EXIT: exit_program
