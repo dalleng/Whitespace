@@ -3,6 +3,10 @@ class StopProgram(Exception):
     pass
 
 
+class InputError(Exception):
+    pass
+
+
 def parse_digit(sign, digit):
     digit = digit or '0'
     digit = digit.replace(' ', '0').replace('\t', '1')
@@ -112,11 +116,34 @@ def heap_store(inp, output, stack, heap):
 
 
 def read_char(inp, output, stack, heap):
-    pass
+    if not inp:
+        raise InputError
+
+    a, inp = inp[0], inp[1:]
+    b = stack.pop()
+    heap[b] = ord(a)
+    return inp, output
 
 
 def read_number(inp, output, stack, heap):
-    pass
+    i = inp.find('\n')
+
+    if i == -1:
+        raise InputError
+
+    try:
+        a = int(inp[:i])
+    except ValueError:
+        try:
+            a = int(inp[:i], base=16)
+        except:
+            raise InputError
+
+    inp = inp[i+1:]
+    b = stack.pop()
+    heap[b] = a
+
+    return inp, output
 
 
 def pop_print(inp, output, stack, heap):

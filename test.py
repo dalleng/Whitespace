@@ -223,5 +223,37 @@ class HeapTest(unittest.TestCase):
             heap_retrieve, print_output, exit)), '4')
 
 
+class InputTest(unittest.TestCase):
+
+    def test_read_char(self):
+        inp = 'A'
+        push1 = '   \t\n'
+        read_char = '\t\n\t '
+        heap_retrieve = '\t\t\t'
+        print_output = '\t\n  '
+        exit = '\n\n\n'
+        self.assertEqual(whitespace('{}{}{}{}{}{}'.format(
+            push1, read_char, push1, heap_retrieve,
+            print_output, exit), inp=inp), 'A')
+
+    def test_read_number(self):
+        inp = '12345\n'
+        push1 = '   \t\n'
+        read_number = '\t\n\t\t'
+        heap_retrieve = '\t\t\t'
+        print_output = '\t\n \t'
+        exit = '\n\n\n'
+
+        self.assertEqual(whitespace('{}{}{}{}{}{}'.format(
+            push1, read_number, push1, heap_retrieve,
+            print_output, exit), inp=inp), '12345')
+
+        inp = '2A\n'
+
+        self.assertEqual(whitespace('{}{}{}{}{}{}'.format(
+            push1, read_number, push1, heap_retrieve,
+            print_output, exit), inp=inp), '42')
+
+
 if __name__ == '__main__':
     unittest.main()
