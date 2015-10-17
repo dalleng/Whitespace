@@ -7,6 +7,11 @@ class InputError(Exception):
     pass
 
 
+class Jump(Exception):
+    def __init__(self, line):
+        self.line = line
+
+
 def parse_digit(sign, digit):
     digit = digit or '0'
     digit = digit.replace(' ', '0').replace('\t', '1')
@@ -15,14 +20,14 @@ def parse_digit(sign, digit):
     return digit
 
 
-def push_stack(inp, output, stack, heap, sign=None, digit=None):
+def push_stack(line, inp, output, stack, heap, sign=None, digit=None):
     assert digit is not None
     assert sign is not None
     stack.append(parse_digit(sign, digit))
     return inp, output
 
 
-def duplicate_nth(inp, output, stack, heap, sign=None, digit=None):
+def duplicate_nth(line, inp, output, stack, heap, sign=None, digit=None):
     assert digit is not None
     assert sign is not None
     n = parse_digit(sign, digit)
@@ -34,7 +39,7 @@ def duplicate_nth(inp, output, stack, heap, sign=None, digit=None):
     return inp, output
 
 
-def discard_top_n(inp, output, stack, heap, sign=None, digit=None):
+def discard_top_n(line, inp, output, stack, heap, sign=None, digit=None):
     assert digit is not None
     assert sign is not None
     n = parse_digit(sign, digit)
@@ -53,12 +58,12 @@ def discard_top_n(inp, output, stack, heap, sign=None, digit=None):
     return inp, output
 
 
-def duplicate_top(inp, output, stack, heap):
+def duplicate_top(line, inp, output, stack, heap):
     stack.append(stack[-1])
     return inp, output
 
 
-def swap_first_two(inp, output, stack, heap):
+def swap_first_two(line, inp, output, stack, heap):
     a = stack.pop()
     b = stack.pop()
     stack.append(a)
@@ -66,56 +71,56 @@ def swap_first_two(inp, output, stack, heap):
     return inp, output
 
 
-def discard_top(inp, output, stack, heap):
+def discard_top(line, inp, output, stack, heap):
     stack.pop()
     return inp, output
 
 
-def addition(inp, output, stack, heap):
+def addition(line, inp, output, stack, heap):
     stack.append(stack.pop() + stack.pop())
     return inp, output
 
 
-def subtraction(inp, output, stack, heap):
+def subtraction(line, inp, output, stack, heap):
     a = stack.pop()
     b = stack.pop()
     stack.append(b - a)
     return inp, output
 
 
-def multiplication(inp, output, stack, heap):
+def multiplication(line, inp, output, stack, heap):
     stack.append(stack.pop() * stack.pop())
     return inp, output
 
 
-def division(inp, output, stack, heap):
+def division(line, inp, output, stack, heap):
     a = stack.pop()
     b = stack.pop()
     stack.append(b // a)
     return inp, output
 
 
-def modulo(inp, output, stack, heap):
+def modulo(line, inp, output, stack, heap):
     a = stack.pop()
     b = stack.pop()
     stack.append(b % a)
     return inp, output
 
 
-def heap_retrieve(inp, output, stack, heap):
+def heap_retrieve(line, inp, output, stack, heap):
     a = stack.pop()
     stack.append(heap[a])
     return inp, output
 
 
-def heap_store(inp, output, stack, heap):
+def heap_store(line, inp, output, stack, heap):
     a = stack.pop()
     b = stack.pop()
     heap[b] = a
     return inp, output
 
 
-def read_char(inp, output, stack, heap):
+def read_char(line, inp, output, stack, heap):
     if not inp:
         raise InputError
 
@@ -125,7 +130,7 @@ def read_char(inp, output, stack, heap):
     return inp, output
 
 
-def read_number(inp, output, stack, heap):
+def read_number(line, inp, output, stack, heap):
     i = inp.find('\n')
 
     if i == -1:
@@ -146,15 +151,59 @@ def read_number(inp, output, stack, heap):
     return inp, output
 
 
-def pop_print(inp, output, stack, heap):
+def pop_print(line, inp, output, stack, heap):
     output += str(stack.pop())
     return inp, output
 
 
-def pop_print_chr(inp, output, stack, heap):
+def pop_print_chr(line, inp, output, stack, heap):
     output += chr(int(stack.pop()))
     return inp, output
 
 
-def exit_program(inp, output, stack, heap):
+def mark_location(line, inp, output, stack, heap, **kwargs):
+    return inp, output
+
+
+def call_subroutine(line, inp, output, stack, heap,
+                    call_stack=None,
+                    label=None,
+                    locations=None):
+    assert label is not None
+    assert call_stack is not None
+    call_stack.append(line)
+    raise Jump(locations[label])
+
+
+def jump(line, inp, output, stack, heap, label=None, locations=None):
+    assert label is not None
+    raise Jump(locations[label])
+
+
+def jump_if_zero(line, inp, output, stack, heap, label=None, locations=None):
+    assert label is not None
+
+    if stack.pop() == 0:
+        raise Jump(locations[label])
+
+    return inp, output
+
+
+def jump_if_lt_zero(line, inp, output, stack, heap,
+                    label=None,
+                    locations=None):
+    assert label is not None
+
+    if stack.pop() < 0:
+        raise Jump(locations[label])
+
+    return inp, output
+
+
+def exit_subroutine(line, inp, output, stack, heap, call_stack=None):
+    assert call_stack is not None
+    raise Jump(call_stack.pop() + 1)
+
+
+def exit_program(line, inp, output, stack, heap):
     raise StopProgram

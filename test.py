@@ -255,5 +255,32 @@ class InputTest(unittest.TestCase):
             print_output, exit), inp=inp), '42')
 
 
+class FlowControl(unittest.TestCase):
+    def test_subroutine(self):
+        code = (
+            # push 1
+            '   \t\n'
+            # call subroutine sn
+            '\n \t \n'
+            # push 2
+            '   \t \n'
+            # call subroutine sn
+            '\n \t \n'
+            # push 3
+            '   \t\t\n'
+            # call subroutine sn
+            '\n \t \n'
+            # exit
+            '\n\n\n'
+            # mark location sn
+            '\n   \n'
+            # pop and print as number
+            '\t\n \t'
+            # return
+            '\n\t\n'
+        )
+        self.assertEqual(whitespace(code), '123')
+
+
 if __name__ == '__main__':
     unittest.main()

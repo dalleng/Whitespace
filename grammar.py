@@ -16,6 +16,12 @@ from commands import (
     read_number,
     pop_print,
     pop_print_chr,
+    mark_location,
+    jump,
+    jump_if_zero,
+    jump_if_lt_zero,
+    call_subroutine,
+    exit_subroutine,
     exit_program
 )
 
@@ -31,8 +37,9 @@ chars = {'SPACE': r' ', 'TAB': r'\t', 'LINE_FEED': r'\n'}
 comments = r'[^{SPACE}{TAB}{LINE_FEED}]'.format(**chars)
 
 
-""" Each command in whitespace begins with an Instruction Modification
-    Parameter (IMP).
+"""
+Each command in whitespace begins with an Instruction Modification
+Parameter (IMP).
 """
 STACK_MANIPULATION = r'{SPACE}'.format(**chars)
 ARITHMETIC = r'{TAB}{SPACE}'.format(**chars)
@@ -57,6 +64,18 @@ Parsing Numbers
 SIGN = r'(?P<sign>{TAB}|{SPACE})'.format(**chars)
 DIGIT = r'(?P<digit>({SPACE}|{TAB})*)'.format(**chars)
 NUMBER = r'{SIGN}{DIGIT}{LINE_FEED}'.format(SIGN=SIGN, DIGIT=DIGIT, **chars)
+
+"""
+Parsing Labels
+
+Labels begin with any number of [tab] and [space] characters.
+Labels end with a terminal symbol: [line-feed].
+Unlike with numbers, the expression of just [terminal] is valid.
+Labels must be unique.
+A label may be declared either before or after a command that refers to it.
+"""
+LABEL = r'(?P<label>({TAB}|{SPACE})*){LINE_FEED}'.format(**chars)
+
 
 """
 IMP [space] - Stack Manipulation
@@ -134,6 +153,34 @@ POP_PRINT_CHR = r'{SPACE}{SPACE}'.format(**chars)
 READ_CHAR = r'{TAB}{SPACE}'.format(**chars)
 READ_NUMBER = r'{TAB}{TAB}'.format(**chars)
 
+"""
+IMP [line-feed] - Flow Control
+
+    [space][space] (label): Mark a location in the program with label n.
+
+    [space][tab] (label): Call a subroutine with the
+    location specified by label n.
+
+    [space][line-feed] (label): Jump unconditionally to the position specified
+    by label n.
+
+    [tab][space] (label): Pop a value off the stack and jump to the label
+    specified by n if the value is zero.
+
+    [tab][tab] (label): Pop a value off the stack and jump to the label
+    specified by n if the value is less than zero.
+
+    [tab][line-feed]: Exit a subroutine and return control to the location from
+    which the subroutine was called.
+
+    [line-feed][line-feed]: Exit the program.
+"""
+MARK_LOCATION = r'{SPACE}{SPACE}{LABEL}'.format(LABEL=LABEL, **chars)
+CALL_SUBROUTINE = r'{SPACE}{TAB}{LABEL}'.format(LABEL=LABEL, **chars)
+JUMP = r'{SPACE}{LINE_FEED}{LABEL}'.format(LABEL=LABEL, **chars)
+JUMP_IF_ZERO = r'{TAB}{SPACE}{LABEL}'.format(LABEL=LABEL, **chars)
+JUMP_IF_LT_ZERO = r'{TAB}{TAB}{LABEL}'.format(LABEL=LABEL, **chars)
+EXIT_SUBROUTINE = r'{TAB}{LINE_FEED}'.format(**chars)
 EXIT = r'{LINE_FEED}{LINE_FEED}'.format(**chars)
 
 grammar = {
@@ -163,6 +210,12 @@ grammar = {
         READ_NUMBER: read_number,
     },
     FLOW_CONTROL: {
+        MARK_LOCATION: mark_location,
+        CALL_SUBROUTINE: call_subroutine,
+        JUMP: jump,
+        JUMP_IF_ZERO: jump_if_zero,
+        JUMP_IF_LT_ZERO: jump_if_lt_zero,
+        EXIT_SUBROUTINE: exit_subroutine,
         EXIT: exit_program
     }
 }
